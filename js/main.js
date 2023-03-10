@@ -19,8 +19,8 @@ function hienThiTable(mang) {
         <td>${nv.tongLuong}</td>
         <td>${nv.xepLoai}</td>
         <td>
-        <button class="btn btn-success">Xem</button>    
-        <button class="btn btn-danger">Xóa</button>
+        <button onclick="xemChiTiet('${nv.taiKhoan}')" class="btn btn-success">Xem</button>    
+        <button onclick="xoaNhanVien('${nv.taiKhoan}')" class="btn btn-danger">Xóa</button>
         </td>
     
         </tr>`
@@ -33,42 +33,99 @@ function hienThiTable(mang) {
 
 
 function setLocalStorage(mang) {
-    localStorage.setItem("DSNV",JSON.stringify(mang))
+    localStorage.setItem("DSNV", JSON.stringify(mang))
 }
 
 function getLocalStoeStorage() {
-    var arr=[]
+    var arr = []
     if (localStorage.getItem("DSNV") != null) {
-        arr= JSON.parse(localStorage.getItem("DSNV"));
+        arr = JSON.parse(localStorage.getItem("DSNV"));
         console.log(arr)
         hienThiTable(arr);
     }
 }
-//* can than cho này de loi neu trong localstorage chưa có dữ liệu
-// phia trong hamf co xu lys dk roif nen chac ko sao
-//daj anh no chua hien 2 nut button xem va xoa, anh coi giup e
-//! thuwr them 1 nv anh xem, da de em sua lai id
 
 
 function themNhanVien() {
-    
-    var taiKhoan = getELE("tknv").value; 
-    var tenNV = getELE("name").value; 
-    var email = getELE("email").value; 
-    var matKhau = getELE("password").value; 
-    var ngayLam = getELE("datepicker").value; 
-    var luongCB = getELE("luongCB").value; 
-    var chucVu = getELE("chucvu").value; 
-    var gioLam = getELE("gioLam").value; 
-    console.log(taiKhoan,tenNV,email,matKhau,ngayLam,luongCB,chucVu,gioLam);
-    dsnv.themNV({taiKhoan,tenNV,email,matKhau,ngayLam,luongCB,chucVu,gioLam})
+
+    var taiKhoan = getELE("tknv").value;
+    var tenNV = getELE("name").value;
+    var email = getELE("email").value;
+    var matKhau = getELE("password").value;
+    var ngayLam = getELE("datepicker").value;
+    var luongCB = Number(getELE("luongCB").value);
+    var chucVu = getELE("chucvu").value;
+    var gioLam = Number(getELE("gioLam").value);
+    console.log(taiKhoan, tenNV, email, matKhau, ngayLam, luongCB, chucVu, gioLam);
+    dsnv.themNV({ taiKhoan, tenNV, email, matKhau, ngayLam, luongCB, chucVu, gioLam })
+   
     setLocalStorage(dsnv.mangNV)
     getLocalStoeStorage()
 
 }
 
 
-// thêm sưk kiện butôn bắt kiện sau khi nguoi dùng nhập thông tin
-//
+getLocalStoeStorage();
 
-getLocalStoeStorage()
+
+
+function xoaNhanVien(id) {
+    console.log(id)
+    dsnv.xoaNV(id);
+    setLocalStorage(dsnv.mangNV);
+    getLocalStoeStorage();
+}
+
+
+function xemChiTiet(id) {
+    var index = dsnv.findIndexNV(id);
+    if (index != -1) {
+        console.log(dsnv.mangNV[index]);
+        getELE("tknv").value = dsnv.mangNV[index].taiKhoan
+        getELE("name").value = dsnv.mangNV[index].tenNV;
+        getELE("email").value = dsnv.mangNV[index].email;
+        getELE("password").value = dsnv.mangNV[index].matKhau;
+        getELE("datepicker").value = dsnv.mangNV[index].ngayLam;
+        getELE("luongCB").value = dsnv.mangNV[index].luongCB;
+        getELE("chucvu").value = dsnv.mangNV[index].chucVu;
+        getELE("gioLam").value = dsnv.mangNV[index].gioLam;
+    }
+}
+
+function capNhat() {
+    var taiKhoan = getELE("tknv").value;
+    var tenNV = getELE("name").value;
+    var email = getELE("email").value;
+    var matKhau = getELE("password").value;
+    var ngayLam = getELE("datepicker").value;
+    var luongCB = Number(getELE("luongCB").value);
+    var chucVu = getELE("chucvu").value;
+    var gioLam = Number(getELE("gioLam").value);
+
+    var nv = new NhanVien(taiKhoan, tenNV, email, matKhau, ngayLam, Number(luongCB), chucVu, Number(gioLam));
+    nv.tongLuong();
+    nv.xepLoai();
+
+
+    dsnv.capNhatNV(nv);
+    setLocalStorage(dsnv.mangNV)
+    getLocalStoeStorage();
+}
+
+
+function search() {
+    var keyword = getELE("searchName").value;
+    
+    var mangKQ = dsnv.searchName(keyword);
+
+    hienThiTable(mangKQ);
+}
+
+getELE("btnTimNV").onclick = search;
+
+getELE("searchName").onkeyup = function () {
+    var keyword =  getELE("searchName").value;
+    var mangKQ = dsnv.searchName(keyword);
+    hienThiTable(mangKQ);
+
+}
