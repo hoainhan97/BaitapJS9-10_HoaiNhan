@@ -18,12 +18,12 @@ function Validation() {
             return valueInput === nv.taiKhoan
         });
         if (isExist) {
-            //mã trùng => không hợp lệ
+            //tài khoản trùng => không hợp lệ
             document.getElementById(spanID).style.display = "block";
             document.getElementById(spanID).innerHTML = message;
             return false
         }else {
-            //mã ko trùng => hợp lệ 
+            //tài khoản ko trùng => hợp lệ 
             document.getElementById(spanID).style.display = "none";
             document.getElementById(spanID).innerHTML = "";
             return true
@@ -35,7 +35,7 @@ function Validation() {
 
         if (pattern.test(valueInput)) {
             //hợp lệ
-            console.log(123);
+           
 
             document.getElementById(spanID).style.display = "none";
             document.getElementById(spanID).innerHTML = "";
@@ -71,6 +71,7 @@ this.checkEmail = function (valueInput, spanID, message) {
 
 }
 this.checkPass = function (valueInput, spanID, message) {
+   
     var pattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{6,8}$/
     if (pattern.test(valueInput)) {
         //hợp lệ
@@ -108,9 +109,16 @@ this.checkSelect = function (selectID,spanID,message) {
     }
 
     this.checkSalary = function (valueInput, spanID, message) {
-        var pattern = /^(\d{1,2}(\.\d{1,2})?)$/
-
-        if (pattern.test(valueInput) && valueInput >=1000 && valueInput<=2000) {
+        // cái pattern ni thì dk thế nào dậy? là sao a
+        // cái đoạn pattern dưới nek, e lấy trên file qlsv hôm bữa học đó a,ý nghiax của đoạn ni không biết  mah đem sài hỏw,hôm bữa học c Nguyên bảo là chỉ dc gõ số, nhập chữ báo lỗi
+        // cái doạn này chỉ cho nhap so chri 2 chữ số hoy nên khi nhập nhìu nó báo lỗi đúng ròi
+        // var pattern = /^(\d{1,2}(\.\d{1,2})?)$/
+        // var test = pattern.test(valueInput)
+        // console.log(test)
+        // vì đổi type về number nên ng dùng chỉ nhập được số hoy
+        //! lưu ý: bất kể input là gì thì value lấy về là kiểu string !
+        
+        if (valueInput >=1000000 && valueInput<=2000000) {
             document.getElementById(spanID).style.display = "none";
             document.getElementById(spanID).innerHTML = "";
             return true
@@ -125,9 +133,9 @@ this.checkSelect = function (selectID,spanID,message) {
     }
 
     this.checkTime = function (valueInput, spanID, message) {
-        var pattern = /^(\d{1,2}(\.\d{1,2})?)$/
+        
 
-        if (valueInput.match(pattern) && valueInput >=80 && valueInput<=200) {
+        if ( valueInput >=80 && valueInput <= 200) {
             document.getElementById(spanID).style.display = "none";
             document.getElementById(spanID).innerHTML = "";
             return true

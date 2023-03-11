@@ -63,10 +63,9 @@ function themNhanVien() {
     nv.tinhLuong()
     nv.xepLoai()
     console.log(nv)
-    dsnv.themNV(nv)
-    
-    setLocalStorage(dsnv.mangNV)
-    getLocalStoeStorage()
+
+    // setLocalStorage(dsnv.mangNV)
+    // getLocalStoeStorage()
 
 
     //TODO VALIDATION:
@@ -91,16 +90,20 @@ function themNhanVien() {
 
     //giờ làm
     isValid &= validation.checkEmpty(gioLam,"tbGiolam","Giờ làm ko được để trống!") && validation.checkTime(gioLam,"tbGiolam", "Giờ làm không hợp lệ!");
-
+console.log(isValid)
 
     if (isValid) {
         var nv = new NhanVien(taiKhoan, tenNV, email, matKhau, ngayLam, Number(luongCB), chucVu, Number(gioLam));
-
-
         dsnv.themNV(nv);
         console.log(dsnv.mangNV)
+        nv.tinhLuong();
+        nv.xepLoai();
         hienThiTable(dsnv.mangNV);
         setLocalStorage(dsnv.mangNV);
+        console.log('Success')
+    }
+    else{
+        console.log("k add")
     }
 
 
