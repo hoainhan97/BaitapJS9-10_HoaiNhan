@@ -1,4 +1,6 @@
 const dsnv = new DanhSachNhanVien();
+const validation = new Validation();
+
 
 function getELE(id) {
     return document.getElementById(id);
@@ -57,10 +59,52 @@ function themNhanVien() {
     var chucVu = getELE("chucvu").value;
     var gioLam = Number(getELE("gioLam").value);
     console.log(taiKhoan, tenNV, email, matKhau, ngayLam, luongCB, chucVu, gioLam);
-    dsnv.themNV({ taiKhoan, tenNV, email, matKhau, ngayLam, luongCB, chucVu, gioLam })
-   
+    var nv = new NhanVien( taiKhoan, tenNV, email, matKhau, ngayLam, luongCB, chucVu, gioLam )
+    nv.tinhLuong()
+    nv.xepLoai()
+    console.log(nv)
+    dsnv.themNV(nv)
+    
     setLocalStorage(dsnv.mangNV)
     getLocalStoeStorage()
+
+
+    //TODO VALIDATION:
+    var isValid = true;
+    //taiKhoan
+    isValid &= validation.checkEmpty(taiKhoan,"tbTKNV","Tài khoản không được để trống") && validation.checkTK(taiKhoan,"tbTKNV","Tài khoản không được trùng", dsnv.mangNV);
+    
+    //tenNV
+    isValid &= validation.checkEmpty(tenNV,"tbTen","Tên nhân viên không được để trống!") && validation.checkName(tenNV,"tbTen","Tên nhân viên chưa đúng định dạng");
+
+    //email
+    isValid &= validation.checkEmpty(email,"tbEmail","Email ko được để trống!") && validation.checkEmail(email,"tbEmail","Email chưa đúng định dạng");
+
+    //pass
+    isValid &= validation.checkEmpty(matKhau,"tbMatKhau","Mật khẩu ko được để trống!") && validation.checkPass(matKhau,"tbMatKhau","Mật khẩu chưa đúng định dạng");
+
+    //chức vụ
+    isValid &= validation.checkSelect("chucvu","tbChucVu", "Chức vụ chưa hợp lệ!");
+
+    // lương: số, 1000000 => 20000000
+    isValid &= validation.checkEmpty(luongCB,"tbLuongCB","Lương ko được để trống!") && validation.checkSalary(luongCB,"tbLuongCB", "Lương không hợp lệ!");
+
+    //giờ làm
+    isValid &= validation.checkEmpty(gioLam,"tbGiolam","Giờ làm ko được để trống!") && validation.checkTime(gioLam,"tbGiolam", "Giờ làm không hợp lệ!");
+
+
+    if (isValid) {
+        var nv = new NhanVien(taiKhoan, tenNV, email, matKhau, ngayLam, Number(luongCB), chucVu, Number(gioLam));
+
+
+        dsnv.themNV(nv);
+        console.log(dsnv.mangNV)
+        hienThiTable(dsnv.mangNV);
+        setLocalStorage(dsnv.mangNV);
+    }
+
+
+
 
 }
 
